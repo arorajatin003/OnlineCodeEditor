@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from '@/styles/Home.module.css'
 import Editor from "./Editor/editor";
+
 const editorPage = ()=>{
     const [HTML, setHTML] = useState('');
     const [CSS, setCSS] = useState('');
