@@ -1,66 +1,28 @@
 import { useState, useEffect } from "react";
 import styles from '@/styles/Home.module.css'
 import Editor from "./components/Editor/editor";
-
+import EditorPage from "./components/editorPage";
+import Login from "./components/Login/login";
+import {useAuthState} from "react-firebase-hooks/auth";
+import Firebase from "../firebase/clientApp";
 
 const App = ()=>{
-    const [HTML, setHTML] = useState('');
-    const [CSS, setCSS] = useState('');
-    const [JS, setJS] = useState('');
-    const [srcDoc, setSrcDoc] = useState('');
+    // const [user, setUser] = useState({});
+    const [login,setLogin] = useState(false);
 
-    useEffect(()=>{
-        const timeout = setTimeout(()=>{
-            setSrcDoc(`
-                <html>
-                    <body>${HTML}</body>
-                    <style>${CSS}</style>
-                    <script${JS}</script>
-                </html>
-            `);
-        },500);
-
-        return ()=>clearTimeout(timeout);
-    },[HTML,CSS,JS]);
-
+    // useEffect(()=>{
+    //     setLogin(!login);
+    // },[user])
+    const [user, loading, error] = useAuthState(Firebase.auth());
+     useEffect(()=>{
+        setLogin(user?true:false);
+        alert(user?.displayName);
+    },[user])
+    console.log("loding:",loading, "| Current User: ", user);
     return(
-        <div className={styles.page}>
-            {/* <Headers /> */}
-            <div className={styles.body}>
-                <div className={styles.input_editor}>
-                    <Editor 
-                        displayName="HTML"
-                        onChange={setHTML}
-                        value={HTML}
-                    />
-                    <Editor 
-                        displayName="CSS"
-                        onChange={setCSS}
-                        value={CSS}
-                    />
-                    <Editor 
-                        displayName="JavaScript"
-                        onChange={setJS}
-                        value={JS}
-                    />
-                </div>
-                <div className={styles.output_window}>
-                    <div className={styles.output_header}>
-                        OUTPUT
-                    </div>
-                    <iframe 
-                        srcDoc={srcDoc}
-                        title='OUTPUT'
-                        sandbox='allow-scripts'
-                        width='100%'
-                        height='100%'
-                    />
-                </div>
-            </div>
-            
-            
+        <div>
+            {login?<EditorPage />:<Login/>}
         </div>
-        
     )
 }
 
