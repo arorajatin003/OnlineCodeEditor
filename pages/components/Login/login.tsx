@@ -2,27 +2,26 @@ import styles from '@/styles/Home.module.css'
 import Header from '../Header/header';
 import firebase from '../../../firebase/clientApp';
 
-const LoginPage = ()=>{
-    // const uiConfig = {
-    //     signInSuccessUrl: "/",
-    //     signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-    // }
+
+const LoginPage = (props:any)=>{
+    const {setUser} = props;
+    const auth = firebase.auth();
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    
     const signIn=()=>{
-        firebase.auth()
-          .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+        auth
+          .signInWithPopup(provider)
           .then((result)=>{
-            // dispatch({
-            //   type: actionType.SET_USER,
-            //   user: result.user,
-            // })
-            // setUser(result.additionalUserInfo?.profile)
-            console.log(result);
+            setUser(result.additionalUserInfo?.profile)
           })
           .catch((error)=>alert(error.message));
-      };
+        };
+
+
     return(
         <div className={styles.login}>
-            <Header login={false}/>
+            <Header/>
             <div className={styles.login_body}>
                 <div className={styles.login_container}>
                     <div className={styles.login_title}>
@@ -31,7 +30,6 @@ const LoginPage = ()=>{
                     <button onClick={signIn}>
                         Sign In with Google
                     </button>
-                    {/* <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> */}
                 </div>
             </div>
             
