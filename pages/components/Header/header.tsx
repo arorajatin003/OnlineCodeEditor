@@ -1,8 +1,8 @@
 import styles from '@/styles/Home.module.css'
-
-
-const header = (props:any)=>{
-    const {login} = props
+import firebase from '../../../firebase/clientApp';
+import {Avatar} from '@mui/material'
+const header = ()=>{
+    const user = firebase.auth().currentUser;
     return(
         <div className={styles.header}>
             <div className={styles.header_title}>
@@ -10,7 +10,7 @@ const header = (props:any)=>{
             </div>
             <div className={styles.header_icons}>
                 <li><a>About</a></li>
-                {login?<li>USER</li>:<li>login</li>}
+                {user && <li><Avatar src={user.photoURL as string}/></li>}
             </div>
             
         </div>
